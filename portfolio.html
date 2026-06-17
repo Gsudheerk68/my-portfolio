@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SK | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #050a0f;
+    --surface:   #0b1520;
+    --border:    #0ff3;
+    --cyan:      #00f5ff;
+    --magenta:   #ff00c8;
+    --yellow:    #f5e642;
+    --text:      #c8e0f0;
+    --muted:     #4a6a80;
+    --font-display: 'Orbitron', monospace;
+    --font-body:    'Rajdhani', sans-serif;
+    --font-mono:    'Share Tech Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,.12) 2px, rgba(0,0,0,.12) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .9rem 2.5rem;
+    background: rgba(5,10,15,.88);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: .95rem;
+    color: var(--cyan);
+    letter-spacing: .15em;
+  }
+  .nav-logo span { color: var(--magenta); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: .1em;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 6rem 8vw 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 80% at 20% 50%, black 30%, transparent 100%);
+    opacity: .5;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    color: var(--magenta);
+    letter-spacing: .3em;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: .6rem;
+  }
+  .hero-name .glow {
+    color: var(--white);
+    text-shadow: 0 0 5px var(--cyan), 0 0 20px #00f5ff55;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(.9rem, 2.5vw, 1.5rem);
+    color: var(--magenta);
+    letter-spacing: .15em;
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    color: var(--text);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    letter-spacing: .1em;
+    padding: .75rem 2rem;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s, color .2s, box-shadow .2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover {
+    background: var(--cyan);
+    color: var(--bg);
+    box-shadow: 0 0 24px var(--cyan);
+  }
+
+  .btn-secondary {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    letter-spacing: .1em;
+    padding: .75rem 2rem;
+    background: transparent;
+    border: 1px solid var(--magenta);
+    color: var(--magenta);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s, color .2s, box-shadow .2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-secondary:hover {
+    background: var(--magenta);
+    color: var(--bg);
+    box-shadow: 0 0 24px var(--magenta);
+  }
+
+  /* status badge */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-mono); font-size: .75rem;
+    border: 1px solid #0f03; background: #0f01;
+    color: #0f9; padding: .35rem .9rem;
+    margin-bottom: 2rem;
+    letter-spacing: .08em;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #0f9;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: .3; }
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 6rem 8vw; }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--magenta);
+    letter-spacing: .3em;
+    margin-bottom: .5rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    color: #fff;
+    margin-bottom: 3rem;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: '';
+    position: absolute; bottom: -8px; left: 0;
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+  }
+
+  /* ── ABOUT ── */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-text p { margin-bottom: 1rem; color: var(--text); }
+  .about-text p strong { color: var(--cyan); }
+
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+  }
+  .stat-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--cyan), var(--magenta));
+  }
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--cyan);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--muted);
+    letter-spacing: .1em;
+    margin-top: .3rem;
+  }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--surface); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-category {
+    border: 1px solid var(--border);
+    padding: 1.6rem;
+    position: relative;
+    background: var(--bg);
+  }
+  .skill-cat-title {
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    color: var(--yellow);
+    letter-spacing: .15em;
+    margin-bottom: 1.2rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .skill-tag {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    padding: .3rem .8rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: transparent;
+    letter-spacing: .05em;
+    transition: border-color .2s, color .2s;
+  }
+  .skill-tag:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .25s, transform .25s;
+  }
+  .project-card:hover {
+    border-color: var(--cyan);
+    transform: translateY(-4px);
+  }
+  .project-card::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, transparent 50%, var(--cyan) 50%);
+    opacity: .2;
+  }
+  .project-card:hover::after { opacity: .6; }
+
+  .project-type {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    color: var(--magenta);
+    letter-spacing: .2em;
+    margin-bottom: .8rem;
+  }
+  .project-name {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: .6rem;
+  }
+  .project-desc {
+    font-size: .95rem;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+  }
+  .project-stack { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .project-tech {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--cyan);
+    background: #00f5ff10;
+    border: 1px solid #00f5ff30;
+    padding: .2rem .6rem;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--surface); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .contact-text p { color: var(--text); margin-bottom: 1rem; }
+  .contact-links { display: flex; flex-direction: column; gap: .9rem; margin-top: 2rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    color: var(--text);
+    text-decoration: none;
+    padding: .8rem 1.2rem;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    transition: border-color .2s, color .2s;
+  }
+  .contact-link:hover { border-color: var(--cyan); color: var(--cyan); }
+  .contact-link .link-icon { color: var(--cyan); font-size: 1.1rem; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+  .form-group { display: flex; flex-direction: column; gap: .4rem; }
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+  .form-input, .form-textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: .88rem;
+    padding: .75rem 1rem;
+    outline: none;
+    transition: border-color .2s;
+    width: 100%;
+    resize: none;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--cyan); }
+  .form-textarea { height: 120px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  /* ── GLITCH ANIMATION on name ── */
+  @keyframes glitch {
+    0%,90%,100% { clip-path: none; transform: none; }
+    91% { clip-path: polygon(0 10%, 100% 10%, 100% 40%, 0 40%); transform: translate(-3px,0); }
+    93% { clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); transform: translate(3px,0); }
+    95% { clip-path: none; transform: none; }
+  }
+  .hero-name { animation: glitch 6s infinite; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: .8rem 1.4rem; }
+    .nav-links { display: none; }
+    #hero { padding: 5rem 5vw 3rem; }
+    #about .about-grid,
+    .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    section { padding: 4rem 5vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sudheer Kumar Gooty<span>.</span>Developer</div>
+  <ul class="nav-links">
+    <li><a href="#about">// about</a></li>
+    <li><a href="#skills">// skills</a></li>
+    <li><a href="#projects">// projects</a></li>
+    <li><a href="#contact">// contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="status-badge">
+    <span class="status-dot"></span>
+    AVAILABLE FOR INTERNSHIPS
+  </div>
+
+  <h1 class="hero-name"><span class="glow">Sudheer Kumar Gooty</span></h1>
+  <p class="hero-title">Full-Stack Developer &nbsp;&nbsp;·&nbsp; Content Creator</p>
+  <p class="hero-desc">
+    B.Tech CSE student at RGUKT-AP, building real-time web apps, growing digital communities.
+  </p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn-primary">VIEW PROJECTS</a>
+    <a href="#contact" class="btn-secondary">CONTACT ME</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">// SYSTEM_INFO</p>
+  <h2 class="section-title">About Me</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        I'm a final-year <strong>B.Tech Computer Science & Engineering</strong> student at <strong>RGUKT (RK Valley)</strong>, Andhra Pradesh — graduating in the 2027 batch.
+      </p>
+      <p>
+        I build full-stack applications with the <strong>MERN stack</strong> and level up my <strong>Java DSA</strong> game.  I run a YouTube channel (<strong>Rockzz</strong>) and an Instagram community page (<strong>rgukt_yuvatha</strong>) packed with movie promos, event coverage, and viral memes.
+      </p>
+     
+      <p>
+        Currently seeking <strong>software engineering and full stack web development internships</strong> where I can bring both technical depth and creative execution to the table.
+      </p>
+    </div>
+    <div class="about-stats">
+
+     
+      <div class="stat-card">
+        <div class="stat-number">2</div>
+        <div class="stat-label">ACTIVE SOCIAL CHANNELS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">MERN</div>
+        <div class="stat-label">FULL-STACK EXPERTISE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">// CAPABILITIES</p>
+  <h2 class="section-title">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-category">
+      <p class="skill-cat-title">[ FRONTEND ]</p>
+      <div class="skill-tags">
+        <span class="skill-tag">React.js</span>
+        <span class="skill-tag">HTML5</span>
+        <span class="skill-tag">CSS3</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Tailwind CSS</span>
+         <span class="skill-tag">Typescript</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <p class="skill-cat-title">[ BACKEND ]</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Express.js</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">Socket.IO</span>
+        <span class="skill-tag">Passport.js</span>
+        <span class="skill-tag">REST APIs</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <p class="skill-cat-title">[ DSA & LANGUAGES ]</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">Arrays</span>
+        <span class="skill-tag">LinkedList</span>
+        <span class="skill-tag">HashMap</span>
+        <span class="skill-tag">OOP</span>
+        <span class="skill-tag">LeetCode</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <p class="skill-cat-title">[ CONTENT & MARKETING ]</p>
+      <div class="skill-tags">
+        <span class="skill-tag">YouTube Shorts</span>
+        <span class="skill-tag">Instagram Reels</span>
+        <span class="skill-tag">Meme Marketing</span>
+        <span class="skill-tag">Social Analytics</span>
+        <span class="skill-tag">Organic Growth</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <p class="skill-cat-title">[ TOOLS ]</p>
+      <div class="skill-tags">
+        <span class="skill-tag">Git / GitHub</span>
+        <span class="skill-tag">VS Code</span>
+        <span class="skill-tag">Postman</span>
+        <span class="skill-tag">MongoDB Compass</span>
+      </div>
+    </div>
+   
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">// BUILD_LOG</p>
+  <h2 class="section-title">Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <p class="project-type">FULL-STACK · REAL ESTATE</p>
+      <h3 class="project-name">PlotLine</h3>
+      <p class="project-desc">A real-time real estate web app with live chat, property listings, authentication, and backend API integration — currently in active development.</p>
+      <div class="project-stack">
+        <span class="project-tech">Node.js</span>
+        <span class="project-tech">Express</span>
+        <span class="project-tech">MongoDB</span>
+        <span class="project-tech">Socket.IO</span>
+        <span class="project-tech">React</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <p class="project-type">FULL-STACK · SOCIAL PLATFORM</p>
+      <h3 class="project-name">MemersGuru</h3>
+      <p class="project-desc">MERN stack meme & content community platform with Google OAuth (Passport.js), template management, and creator ownership verification.</p>
+      <div class="project-stack">
+        <span class="project-tech">MongoDB</span>
+        <span class="project-tech">Express</span>
+        <span class="project-tech">React</span>
+        <span class="project-tech">Node.js</span>
+        <span class="project-tech">Passport.js</span>
+        <span class="project-tech">claudinary</span>
+        <span class="project-tech">github</span>
+        <span class="project-tech">restful apis</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <p class="project-type">FULL STACK ECOMMERCE WEB APPLICATION</p>
+      <h3 class="project-name">FairCart</h3>
+      <p class="project-desc">FairCart-a full stack web application made with mern stack technologies,jwt authentication,restful apis glassmorphism UI, deployed on GitHub Pages.</p>
+      <div class="project-stack">
+        <span class="project-tech">React</span>
+        <span class="project-tech">CSS</span>
+        <span class="project-tech">node.js</span>
+        <span class="project-tech">express.js</span>
+        <span class="project-tech">jwt auth</span>
+        <span class="project-tech">restful apis</span>
+        <span class="project-tech">geo location api</span>
+        <span class="project-tech">GitHub Pages</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <p class="project-type">CONTENT · SOCIAL MEDIA</p>
+      <h3 class="project-name">rgukt_yuvatha</h3>
+      <p class="project-desc">Instagram community page driving organic reach through movie promos, event coverage reels, and meme content targeting RGUKT's student community.</p>
+      <div class="project-stack">
+        <span class="project-tech">Content Strategy</span>
+        <span class="project-tech">Reels</span>
+        <span class="project-tech">Meme Marketing</span>
+        <span class="project-tech">Analytics</span>
+      </div>
+    </div>
+   
+    
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">// ESTABLISH_CONNECTION</p>
+  <h2 class="section-title">Contact</h2>
+  <div class="contact-grid">
+    <div class="contact-text">
+      <p>Open to <strong style="color:var(--cyan)">internship opportunities</strong> in software engineering, social media marketing, or full-stack development.</p>
+      <p>Currently at RGUKT-AP, Andhra Pradesh.</p>
+      <div class="contact-links">
+        <a href="https://github.com/Gsudheerk68" class="contact-link" target="_blank">
+          <span class="link-icon">⌥</span> github.com/sudheerk68
+        </a>
+        <a href="https://www.instagram.com/rgukt_yuvatha?igsh=MWlwamJzMXp1OG1lNA==" class="contact-link" target="_blank">
+          <span class="link-icon">◈</span> @rgukt_yuvatha
+        </a>
+        <a href="https://www.linkedin.com/in/sudheer-kumar-gooty-535867413?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="contact-link" target="_blank">
+          <span class="link-icon">▶</span> Linkedin profile
+        </a>
+        <a href="mailto:sudheersudheerkumar125@gmail.com" class="contact-link">
+          <span class="link-icon">✉</span> sudheersudheerkumar125@gmail.com
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group">
+        <label class="form-label">// YOUR NAME</label>
+        <input class="form-input" type="text" placeholder="Enter name..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">// EMAIL ADDRESS</label>
+        <input class="form-input" type="email" placeholder="Enter email..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">// MESSAGE</label>
+        <textarea class="form-textarea" placeholder="Type message..."></textarea>
+      </div>
+      <button class="btn-primary" style="align-self:flex-start" onclick=alert("submittd");>TRANSMIT →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  &lt;SudheerKumar.DEVELOPER /&gt; &nbsp;·&nbsp; RGUKT-AP 2027 &nbsp;·&nbsp; BUILT WITH PASSION 
+</footer>
+
+<script>
+  // Smooth highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--cyan)' : '';
+    });
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.project-card, .skill-category, .stat-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
